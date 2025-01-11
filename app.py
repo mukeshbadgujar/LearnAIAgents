@@ -8,6 +8,8 @@ from services.image_generator import generate_image
 from services.fetch_data import fetch_github_releases
 from emoji import emojize
 
+from utils.common_functions import font_preview, load_fonts_in_browser, generate_custom_dropdown
+
 # Configure logging
 logging.basicConfig(filename="logs/app.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
@@ -16,9 +18,11 @@ DEFAULT_TEXT = "Your Daily Tech Update\nPowered by AI!"
 
 # --- Helper Functions ---
 def list_available_fonts(font_dir):
-    if not os.path.exists(font_dir):
-        os.makedirs(font_dir)
-    return [f for f in os.listdir(font_dir) if f.endswith(".ttf")]
+    try:
+        return [f for f in os.listdir(font_dir) if f.endswith(".ttf")]
+    except Exception as e:
+        st.error(f"Error listing fonts: {e}")
+        return []
 
 # Sidebar: Settings for Image Design
 st.sidebar.title("Design Your Post")
@@ -29,7 +33,33 @@ if not available_fonts:
     st.sidebar.warning("No fonts available. Add `.ttf` font files to the `fonts/` directory.")
     selected_font = None
 else:
-    selected_font = st.sidebar.selectbox("Choose a font", available_fonts, index=0)
+    # Generate font previews
+    font_previews = font_preview(available_fonts, FONT_DIR)
+
+    # Dropdown to display font names
+    selected_font = st.sidebar.selectbox(
+        "Choose a font", available_fonts, format_func=lambda f: f.replace(".ttf", "")
+    )
+
+    # Show preview of the selected font
+    if selected_font:
+        st.sidebar.write("### Font Preview:")
+        preview_img = font_previews[selected_font]
+        st.sidebar.image(preview_img, caption=f"Preview of {selected_font}", use_container_width=False)
+
+    # Load fonts as CSS in the browser
+    # font_css = load_fonts_in_browser(available_fonts, FONT_DIR)
+    # st.markdown(font_css, unsafe_allow_html=True)  # Add CSS styles for fonts into the app
+    #
+    # # Generate the custom dropdown HTML
+    # dropdown_html = generate_custom_dropdown(available_fonts, FONT_DIR)
+    # st.sidebar.markdown(dropdown_html, unsafe_allow_html=True)
+    #
+    # # Hidden text input to capture the font selection
+    # selected_font = st.sidebar.text_input("Selected Font", key="selected_font", value="")
+    #
+    # if selected_font:
+    #     st.sidebar.success(f"Selected font: {selected_font}")
 
 # Text Customization
 text_input = st.sidebar.text_area("Enter your post text", value=DEFAULT_TEXT)
@@ -88,7 +118,8 @@ try:
         text_x = (IMAGE_SIZE[0] - text_width) // 2
         text_y = (IMAGE_SIZE[1] - text_height) // 2
         draw.multiline_text((text_x, text_y), text_input, font=font, fill=text_color, align="center")
-
+    else:
+        st.sidebar.warning("Please select a font to continue.")
     # Load an emoji-compatible font for rendering emojis
     emoji_font_path = "./fonts/NotoColorEmoji-Regular.ttf"  # Update to a confirmed compatible font path
     if os.path.exists(emoji_font_path):
