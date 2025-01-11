@@ -2,11 +2,12 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 import textwrap
 import streamlit as st
-
 from config import IMAGE_SIZE, FONT_DIR
 
+# Path to an emoji-compatible font
+EMOJI_FONT_PATH = "/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf"
 
-def generate_image(text, font_name, font_size, text_color, bg_color):
+def generate_image(text, font_name, font_size, text_color, bg_color, emojis=None, emoji_size=50, emoji_position=(0, 0)):
     """
     Generates an Instagram-style post image with the given text and styles.
     :param text: The text to display.
@@ -14,6 +15,9 @@ def generate_image(text, font_name, font_size, text_color, bg_color):
     :param font_size: Font size for the text.
     :param text_color: Color of the text.
     :param bg_color: Background color of the image.
+    :param emojis: Emojis to add to the image.
+    :param emoji_size: Size of the emojis.
+    :param emoji_position: Position of the emojis (x, y).
     :return: PIL Image object.
     """
     # Create a blank canvas
@@ -44,4 +48,13 @@ def generate_image(text, font_name, font_size, text_color, bg_color):
 
     # Draw text on the canvas
     draw.multiline_text(position, wrapped_text, font=font, fill=text_color, align="center")
+
+    # Add emojis using an emoji-compatible font
+    if emojis:
+        try:
+            emoji_font = ImageFont.truetype(EMOJI_FONT_PATH, emoji_size)
+            draw.text(emoji_position, emojis, font=emoji_font, fill=text_color)
+        except Exception as e:
+            st.error(f"Error loading emoji font: {e}")
+
     return img
