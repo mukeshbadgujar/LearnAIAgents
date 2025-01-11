@@ -8,7 +8,8 @@ from services.image_generator import generate_image
 from services.fetch_data import fetch_github_releases
 from emoji import emojize
 
-from utils.common_functions import font_preview, load_fonts_in_browser, generate_custom_dropdown
+from utils.common_functions import font_preview, load_fonts_in_browser, generate_custom_dropdown, add_border_and_frame, \
+    edit_image, add_overlays
 
 # Configure logging
 logging.basicConfig(filename="logs/app.log", level=logging.INFO,
@@ -96,6 +97,34 @@ emoji_size = st.sidebar.slider("Emoji Size", min_value=20, max_value=200, value=
 emoji_x = st.sidebar.slider("Emoji X Position", min_value=0, max_value=IMAGE_SIZE[0], value=IMAGE_SIZE[0] // 2)
 emoji_y = st.sidebar.slider("Emoji Y Position", min_value=0, max_value=IMAGE_SIZE[1], value=IMAGE_SIZE[1] // 2)
 
+
+# Border Options
+st.sidebar.subheader("Border Options")
+border_width = st.sidebar.slider("Border Width", min_value=0, max_value=50, value=10)
+border_color = st.sidebar.color_picker("Border Color", value="#000000")
+
+# Frame Options
+st.sidebar.subheader("Frame Options")
+frame_option = st.sidebar.radio("Select Frame", ["None", "Simple Frame", "Patterned Frame"])
+uploaded_frame = None
+if frame_option == "Patterned Frame":
+    uploaded_frame = st.sidebar.file_uploader("Upload Frame Image", type=["png", "jpg"])
+
+
+# Image Editing Options
+st.sidebar.subheader("Image Operations")
+rotate_angle = st.sidebar.slider("Rotate Angle", min_value=0, max_value=360, value=0)
+flip_option = st.sidebar.radio("Flip Image", ["None", "Horizontal", "Vertical"])
+
+# Overlay Options
+st.sidebar.subheader("Overlay Options")
+watermark_text = st.sidebar.text_input("Watermark Text", value="Your Watermark")
+gradient_color = st.sidebar.color_picker("Gradient Color", value="#FFD700")
+
+
+
+
+
 # Main Section: Real-Time Design Preview
 st.title("Dynamic Image Generator for Instagram Posts")
 st.write("See your changes in real-time below.")
@@ -131,6 +160,24 @@ try:
             st.error(f"Error rendering emoji: {e}")
     else:
         st.error("Emoji-compatible font not found. Please check the font path.")
+
+    # Apply edits and borders
+    # if st.button("Apply Edits"):
+    try:
+        # Add borders and frames
+        edited_image = add_border_and_frame(img, border_width, border_color, frame_option, uploaded_frame)
+        # Apply transformations
+        edited_image = edit_image(edited_image, rotate_angle, flip_option)
+        # Add overlays
+        edited_image = add_overlays(edited_image, watermark_text, gradient_color, font_path)
+        # Display the final edited image
+        st.image(edited_image, caption="Final Edited Image", use_container_width=True)
+        # Save option
+        if st.button("Save Edited Image"):
+            edited_image.save("output/edited_instagram_post.png")
+            st.success("Edited image saved successfully!")
+    except Exception as e:
+        st.error(f"Error applying edits: {e}")
 
     # Display the generated image
     st.image(img, caption="Real-Time Design Preview", use_container_width=True)
