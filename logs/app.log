@@ -1,0 +1,13 @@
+2025-01-11 09:28:37,411 - ERROR - Error summarizing content: At least one of TensorFlow 2.0 or PyTorch should be installed. To install TensorFlow 2.0, read the instructions at https://www.tensorflow.org/install/ To install PyTorch, read the instructions at https://pytorch.org/.
+2025-01-11 09:28:37,428 - ERROR - Error creating image: cannot open resource
+2025-01-11 09:29:44,202 - ERROR - Error summarizing content: At least one of TensorFlow 2.0 or PyTorch should be installed. To install TensorFlow 2.0, read the instructions at https://www.tensorflow.org/install/ To install PyTorch, read the instructions at https://pytorch.org/.
+2025-01-11 10:04:53,188 - ERROR - Error summarizing content: At least one of TensorFlow 2.0 or PyTorch should be installed. To install TensorFlow 2.0, read the instructions at https://www.tensorflow.org/install/ To install PyTorch, read the instructions at https://pytorch.org/.
+2025-01-11 10:04:53,189 - ERROR - Error generating post: generate_image() missing 3 required positional arguments: 'font_size', 'text_color', and 'bg_color'
+2025-01-11 10:05:25,746 - ERROR - Error summarizing content: At least one of TensorFlow 2.0 or PyTorch should be installed. To install TensorFlow 2.0, read the instructions at https://www.tensorflow.org/install/ To install PyTorch, read the instructions at https://pytorch.org/.
+2025-01-11 10:05:25,747 - ERROR - Error generating post: generate_image() missing 3 required positional arguments: 'font_size', 'text_color', and 'bg_color'
+2025-01-11 10:08:03,551 - ERROR - Error summarizing content: At least one of TensorFlow 2.0 or PyTorch should be installed. To install TensorFlow 2.0, read the instructions at https://www.tensorflow.org/install/ To install PyTorch, read the instructions at https://pytorch.org/.
+2025-01-11 10:08:03,552 - ERROR - Error generating post: generate_image() missing 3 required positional arguments: 'font_size', 'text_color', and 'bg_color'
+2025-01-11 10:24:44,315 - ERROR - Error summarizing content: Failed to import transformers.models.bart.modeling_tf_bart because of the following error (look up to see its traceback):
+Your currently installed version of Keras is Keras 3, but this is not yet supported in Transformers. Please install the backwards-compatible tf-keras package with `pip install tf-keras`.
+2025-01-11 10:24:44,528 - ERROR - Error generating post: generate_image() missing 3 required positional arguments: 'font_size', 'text_color', and 'bg_color'
+2025-01-11 10:28:12,334 - ERROR - Error generating post: generate_image() missing 3 required positional arguments: 'font_size', 'text_color', and 'bg_color'
