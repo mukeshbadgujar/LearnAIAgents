@@ -1,6 +1,6 @@
-from transformers import pipeline
 import logging
 from config import MAX_SUMMARY_LENGTH, MIN_SUMMARY_LENGTH
+from transformers import pipeline
 
 def summarize_content(content):
     """
